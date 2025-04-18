@@ -1,8 +1,8 @@
-import * as fs from 'fs-extra';
-import * as path from 'path';
-import { parseText } from '@mischareitsma/psl-parser';
-import * as activate from '../src/activate';
-import * as api from '../src/api';
+import * as fs from "fs";
+import * as path from "path";
+import { parseText } from "@mischareitsma/psl-parser";
+import * as activate from "../src/activate";
+import * as api from "../src/api";
 
 /**
  * Returns the specific diagnostics on a given line
@@ -28,8 +28,14 @@ export async function getDiagnostics(
 	testFileName: string,
 	ruleName?: string
 ): Promise<api.Diagnostic[]> {
-	const testFilePath = path.resolve('test', 'files', testFileName);
-	const text = await fs.readFile(testFilePath).then(b => b.toString());
+	const testFilePath = path.resolve("test", "files", testFileName);
+	const text = await new Promise<string>((resolve) => {
+		fs.readFile(testFileName, (err, data) => {
+			if (err) resolve("");
+
+			resolve(data.toString());
+		});
+	});
 
 	const profileComponent = new api.ProfileComponent(testFilePath, text);
 	const diagnostics = activate.getDiagnostics(profileComponent, parseText(text), false);
