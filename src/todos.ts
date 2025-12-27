@@ -1,5 +1,6 @@
-import { tokenizer } from "@mischareitsma/psl-parser";
-import { Diagnostic, DiagnosticSeverity, PslRule } from "./api";
+import { getTokens, Range, Position } from "@mischareitsma/psl-parser";
+
+import { Diagnostic, DiagnosticSeverity, PslRule } from "./api.ts";
 
 export class TodoInfo extends PslRule {
 
@@ -28,7 +29,7 @@ export class TodoInfo extends PslRule {
 }
 
 interface Todo {
-	range: tokenizer.Range;
+	range: Range;
 	message: string;
 }
 
@@ -41,18 +42,18 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 	const finalize = () => {
 		if (!todo) return;
 		const start = todo.range.start;
-		const end = new tokenizer.Position(
+		const end = new Position(
 			currentLine,
 			todo.range.end.character + todo.message.trimEnd().length
 		);
-		todo.range = new tokenizer.Range(start, end);
+		todo.range = new Range(start, end);
 		todo.message = todo.message.trim().replace(/^:/gm, "").trim();
 		if (!todo.message) todo.message = `TODO on line ${todo.range.start.line + 1}.`;
 		todos.push(todo);
 		todo = undefined;
 	};
 
-	const tokens = tokenizer.getTokens(commentText);
+	const tokens = getTokens(commentText);
 	for (const token of tokens) {
 		currentLine = startLine + token.position.line;
 		currentChar = startLine === currentLine
@@ -65,7 +66,7 @@ function getTodosFromComment(commentText: string, startLine: number, startChar: 
 			);
 		}
 		else if (token.value === "TODO" && !todo) {
-			const range = new tokenizer.Range(
+			const range = new Range(
 				currentLine,
 				currentChar,
 				currentLine,

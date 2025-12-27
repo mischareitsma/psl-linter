@@ -1,6 +1,7 @@
+import * as path from "node:path";
+
 import * as fs from "fs-extra";
 import * as minimatch from "minimatch";
-import * as path from "node:path";
 
 type ConfigBaseDir = string;
 export const activeConfigs: Map<ConfigBaseDir, RegexConfig> = new Map();

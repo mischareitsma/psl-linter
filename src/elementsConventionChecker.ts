@@ -1,8 +1,9 @@
 import { Member, MemberClass, Method, Property } from "@mischareitsma/psl-parser";
+
 import {
 	Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MemberRule,
 	MethodRule, PropertyRule,
-} from "./api";
+} from "./api.ts";
 
 export class MethodStartsWithZ extends MethodRule {
 

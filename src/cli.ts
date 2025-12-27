@@ -1,13 +1,15 @@
 #!/usr/bin/env node
+import * as crypto from "node:crypto";
+import * as path from "node:path";
+import * as process from "node:process";
+
 import { Command } from "commander";
-import * as crypto from "crypto";
 import * as fs from "fs-extra";
-import * as path from "path";
-import * as process from "process";
+
 import { parseText } from "@mischareitsma/psl-parser";
-import { getDiagnostics } from "./activate";
-import { Diagnostic, DiagnosticSeverity, ProfileComponent } from "./api";
-import { setConfig } from "./config";
+import { getDiagnostics } from "./activate.ts";
+import { Diagnostic, DiagnosticSeverity, ProfileComponent } from "./api.ts";
+import { setConfig } from "./config.ts";
 
 interface CodeClimateIssue {
 	categories?: string[];

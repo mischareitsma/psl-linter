@@ -1,5 +1,8 @@
-import { Method, ParsedDocument, tokenizer, utilities } from "@mischareitsma/psl-parser";
-import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
+import {
+	Method, ParsedDocument, Token, getCommentsOnLine, getLineAfter
+} from "@mischareitsma/psl-parser";
+
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api.ts";
 
 export enum Code {
 	ONE_EMPTY_LINE = 1,
@@ -102,7 +105,7 @@ export class TwoEmptyLines extends MethodRule {
 }
 
 function addDiagnostic(
-	idToken: tokenizer.Token,
+	idToken: Token,
 	method: Method,
 	message: string,
 	ruleName: string,
@@ -117,7 +120,7 @@ function addDiagnostic(
 }
 
 function hasSeparator(method: Method, parsedDocument: ParsedDocument): boolean {
-	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(
+	const nextLineCommentTokens: Token[] = getCommentsOnLine(
 		parsedDocument,
 		method.id.position.line - 1
 	);
@@ -125,9 +128,9 @@ function hasSeparator(method: Method, parsedDocument: ParsedDocument): boolean {
 }
 
 function hasBlockComment(method: Method, parsedDocument: ParsedDocument): boolean {
-	const nextLineCommentTokens: tokenizer.Token[] = utilities.getCommentsOnLine(
+	const nextLineCommentTokens: Token[] = getCommentsOnLine(
 		parsedDocument,
-		utilities.getLineAfter(method)
+		getLineAfter(method)
 	);
 	return nextLineCommentTokens[0] && nextLineCommentTokens[0].isBlockComment();
 }

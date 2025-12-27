@@ -1,8 +1,8 @@
 import * as path from "node:path";
+
 import {
-	Declaration, Member, Method, Parameter, ParsedDocument, Property
+	Declaration, Member, Method, Parameter, ParsedDocument, Position, Property, Range
 } from "@mischareitsma/psl-parser";
-import { tokenizer } from "@mischareitsma/psl-parser";
 
 export enum DiagnosticSeverity {
 
@@ -33,7 +33,7 @@ export class Diagnostic {
 	/**
 	 * The range to which this diagnostic applies.
 	 */
-	range: tokenizer.Range;
+	range: Range;
 
 	/**
 	 * The human-readable message.
@@ -75,7 +75,7 @@ export class Diagnostic {
 	 * @param message The human-readable message.
 	 * @param severity The severity, default is [error](#DiagnosticSeverity.Error).
 	 */
-	constructor(range: tokenizer.Range,
+	constructor(range: Range,
 		message: string,
 		ruleName: string,
 		severity?: DiagnosticSeverity,
@@ -98,7 +98,7 @@ export class DiagnosticRelatedInformation {
 	/**
 	 * The range of this related diagnostic information.
 	 */
-	range: tokenizer.Range;
+	range: Range;
 
 	/**
 	 * The message of this related diagnostic information.
@@ -111,7 +111,7 @@ export class DiagnosticRelatedInformation {
 	 * @param range The range.
 	 * @param message The message.
 	 */
-	constructor(range: tokenizer.Range, message: string) {
+	constructor(range: Range, message: string) {
 		this.range = range;
 		this.message = message;
 	}
@@ -211,12 +211,12 @@ export class ProfileComponent {
 	 * @param offset A zero-based offset.
 	 * @return A valid [position](#Position).
 	 */
-	positionAt(offset: number): tokenizer.Position {
+	positionAt(offset: number): Position {
 		const before = this.textDocument.slice(0, offset);
 		const newLines = before.match(/\n/g);
 		const line = newLines ? newLines.length : 0;
 		const preCharacters = before.match(/(\n|^).*$/g);
-		return new tokenizer.Position(line, preCharacters ? preCharacters[0].length : 0);
+		return new Position(line, preCharacters ? preCharacters[0].length : 0);
 	}
 
 	private createIndexedDocument(): Map<number, string> {

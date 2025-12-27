@@ -1,10 +1,12 @@
-import * as path from "path";
+import * as path from "node:path";
+
+import { Member, ParsedDocument } from "@mischareitsma/psl-parser";
+
 import {
 	DeclarationRule, Diagnostic, FileDefinitionRule, MemberRule, MethodRule, ParameterRule,
 	ProfileComponent, ProfileComponentRule, PropertyRule, PslRule,
-} from "./api";
-import { getConfig, matchConfig } from "./config";
-import { Member, ParsedDocument } from "@mischareitsma/psl-parser";
+} from "./api.ts";
+import { getConfig, matchConfig } from "./config.ts";
 
 /**
  * Import rules here.
@@ -12,13 +14,13 @@ import { Member, ParsedDocument } from "@mischareitsma/psl-parser";
 import {
 	MemberCamelCase, MemberLength, MemberLiteralCase,
 	MemberStartsWithV, PropertyIsDummy, PropertyIsDuplicate,
-} from "./elementsConventionChecker";
-import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from "./methodDoc";
-import { MultiLineDeclare } from "./multiLineDeclare";
-import { MethodParametersOnNewLine } from "./parameters";
-import { RuntimeStart } from "./runtime";
-import { TblColDocumentation } from "./tblcolDoc";
-import { TodoInfo } from "./todos";
+} from "./elementsConventionChecker.ts";
+import { MethodDocumentation, MethodSeparator, TwoEmptyLines } from "./methodDoc.ts";
+import { MultiLineDeclare } from "./multiLineDeclare.ts";
+import { MethodParametersOnNewLine } from "./parameters.ts";
+import { RuntimeStart } from "./runtime.ts";
+import { TblColDocumentation } from "./tblcolDoc.ts";
+import { TodoInfo } from "./todos.ts";
 
 /**
  * Add new rules here to have them checked at the appropriate time.

@@ -2,11 +2,10 @@
 	"compilerOptions": {
 		"noUnusedLocals": true,
 		"noUnusedParameters": false,
-		"moduleResolution": "node",
-		"module": "ESNext",
-		"target": "ESNext",
+		"moduleResolution": "nodenext",
+		"module": "nodenext",
 		"lib": [
-			"ESNext"
+			"esnext"
 		],
 		"inlineSourceMap": true,
 		"declaration": true,
@@ -19,14 +18,15 @@
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"noImplicitOverride": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true
 	},
 	"exclude": [
 		"node_modules",
-		"out",
 		"dist",
-		"lib",
 		"tmp",
 		"test",
 		"build-package-json.js",
+		"esbuild.cjs"
 	],
 }

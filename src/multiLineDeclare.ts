@@ -1,5 +1,6 @@
-import { Declaration, Method, NON_TYPE_MODIFIERS, tokenizer } from "@mischareitsma/psl-parser";
-import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
+import { Declaration, Method, NON_TYPE_MODIFIERS, getTokens } from "@mischareitsma/psl-parser";
+
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api.ts";
 
 export class MultiLineDeclare extends MethodRule {
 
@@ -19,7 +20,7 @@ export class MultiLineDeclare extends MethodRule {
 				let commaFound: boolean = false;
 				let conditionClose: boolean = false;
 				let typePresent: boolean = false;
-				for (const token of tokenizer.getTokens(fullLine)) {
+				for (const token of getTokens(fullLine)) {
 					if (token.isWhiteSpace()) continue;
 					if (token.isDoubleQuotes()) continue;
 					if (token.isBlockCommentInit()) continue;

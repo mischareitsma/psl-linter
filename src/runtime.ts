@@ -1,9 +1,9 @@
 import {
-	Member, MemberClass, Method, tokenizer, utilities, BinaryOperator, Identifier,
+	Member, MemberClass, Method, Token, Range, getCommentsOnLine, BinaryOperator, Identifier,
 	StringLiteral, SyntaxKind, Value
 } from "@mischareitsma/psl-parser";
 
-import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from "./api";
+import { Diagnostic, DiagnosticRelatedInformation, DiagnosticSeverity, MethodRule } from "./api.ts";
 
 export class RuntimeStart extends MethodRule {
 
@@ -49,7 +49,7 @@ export class RuntimeStart extends MethodRule {
 		method: Method,
 	): void {
 		let lastStart: Value;
-		let variables: Map<Member, tokenizer.Token[]>;
+		let variables: Map<Member, Token[]>;
 		let acceptVariables: string[] = [];
 		for (const runtimeCall of runtimeCalls) {
 			const runtimeMethod = this.getMethod(runtimeCall);
@@ -73,7 +73,7 @@ export class RuntimeStart extends MethodRule {
 				else {
 					const startLine = lastStart.id.position.line;
 					const commitLine = runtimeMethod.id.position.line;
-					const identifierTokens: tokenizer.Token[] =
+					const identifierTokens: Token[] =
 						this.getAllIdentifersInRange(
 							this.parsedDocument.tokens,
 							startLine,
@@ -115,10 +115,10 @@ export class RuntimeStart extends MethodRule {
 
 	}
 	private getAllIdentifersInRange(
-		tokens: tokenizer.Token[],
+		tokens: Token[],
 		startLine: number,
 		commitLine: number
-	): tokenizer.Token[] {
+	): Token[] {
 		return tokens.filter(token => {
 			return token.position.line > startLine && token.position.line < commitLine;
 		});
@@ -127,7 +127,7 @@ export class RuntimeStart extends MethodRule {
 	private createDiagnostic(
 		lastStart: Value,
 		variable: Member,
-		identifiers: tokenizer.Token[],
+		identifiers: Token[],
 		diagnostics: Diagnostic[]
 	) {
 		const range = this.getDiagnosticRange(lastStart);
@@ -162,9 +162,9 @@ export class RuntimeStart extends MethodRule {
 
 	private addVariable(
 		localVariablesOutsideStart: Member[],
-		identifierToken: tokenizer.Token,
+		identifierToken: Token,
 		start: Identifier,
-		variables: Map<Member, tokenizer.Token[]>,
+		variables: Map<Member, Token[]>,
 	) {
 		const variable = localVariablesOutsideStart
 			.find(v => v.id.value === identifierToken.value);
@@ -189,10 +189,10 @@ export class RuntimeStart extends MethodRule {
 		}
 	}
 
-	private getDiagnosticRange(start: Identifier): tokenizer.Range {
+	private getDiagnosticRange(start: Identifier): Range {
 		const startPos = start.id.position.character - "do Runtime.".length;
 		const endPos = start.closeParen.position.character + 1;
-		return new tokenizer.Range(
+		return new Range(
 			start.id.position.line,
 			startPos,
 			start.id.position.line, 
@@ -202,7 +202,7 @@ export class RuntimeStart extends MethodRule {
 
 	private addToWhitelist(runtimeMethod: Identifier) {
 		let acceptVariables: string[] = [];
-		const commentsAbove: tokenizer.Token[] = utilities.getCommentsOnLine(
+		const commentsAbove: Token[] = getCommentsOnLine(
 			this.parsedDocument,
 			runtimeMethod.id.position.line - 1
 		);

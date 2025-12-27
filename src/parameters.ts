@@ -1,5 +1,6 @@
 import { Method, Parameter } from "@mischareitsma/psl-parser";
-import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api";
+
+import { Diagnostic, DiagnosticSeverity, MethodRule } from "./api.ts";
 
 /**
  * Checks if multiple parameters are written on the same line as the method declaration.

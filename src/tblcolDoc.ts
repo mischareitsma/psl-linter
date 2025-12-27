@@ -1,6 +1,8 @@
-import * as path from "path";
-import { tokenizer } from "@mischareitsma/psl-parser";
-import { Diagnostic, DiagnosticSeverity, FileDefinitionRule } from "./api";
+import * as path from "node:path";
+
+import { Range } from "@mischareitsma/psl-parser";
+
+import { Diagnostic, DiagnosticSeverity, FileDefinitionRule } from "./api.ts";
 
 /**
  * Checks whether table and columns are created with documentation.
@@ -30,7 +32,7 @@ export class TblColDocumentation extends FileDefinitionRule {
 			);
 
 			const position = this.profileComponent.positionAt(characterOffset);
-			const range = new tokenizer.Range(position, position);
+			const range = new Range(position, position);
 			diagnostics.push(addDiagnostic(range, message, this.ruleName));
 		}
 
@@ -39,7 +41,7 @@ export class TblColDocumentation extends FileDefinitionRule {
 
 }
 
-function addDiagnostic(range: tokenizer.Range, message: string, ruleName: string): Diagnostic {
+function addDiagnostic(range: Range, message: string, ruleName: string): Diagnostic {
 	const diagnostic = new Diagnostic(range, message, ruleName, DiagnosticSeverity.Information);
 	diagnostic.source = "lint";
 	return diagnostic;
